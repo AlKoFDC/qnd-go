@@ -1,6 +1,6 @@
 package main
 
-import "github.com/AlKoFDC/qndgo/markdown"
+import "github.com/AlKoFDC/qnd-go/markdown"
 
 func main() {
 	markdown.StartServer()
