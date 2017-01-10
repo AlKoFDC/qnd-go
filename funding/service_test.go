@@ -35,9 +35,7 @@ func BenchmarkWithdrawalsService(b *testing.B) {
 	// Wait for all the workers to finish
 	wg.Wait()
 
-	balance := service.Balance()
-
-	if balance != 0 {
+	if balance := service.Balance(); balance != 0 {
 		b.Error("Balance wasn't zero:", balance)
 	}
 }
@@ -77,8 +75,7 @@ func BenchmarkWithdrawalsServicePizza(b *testing.B) {
 	// Wait for all the workers to finish
 	wg.Wait()
 
-	balance := service.Balance()
-	if balance != 10 {
+	if balance := service.Balance(); balance != 10 {
 		b.Error("Balance wasn't ten dollars:", balance)
 	}
 }
