@@ -22,3 +22,17 @@ func (f *Fund) Balance() int {
 func (f *Fund) Withdraw(amount int) {
 	f.balance -= amount
 }
+
+type BalanceProvider interface {
+	Balance() int
+}
+
+type Withdrawer interface {
+	Withdraw(int)
+}
+
+type FundManager interface {
+	BalanceProvider
+	Withdrawer
+	foo() error
+}
