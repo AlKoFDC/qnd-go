@@ -38,6 +38,7 @@ func BenchmarkWithdrawalsServer(b *testing.B) {
 	balanceResponseChan := make(chan int)
 	server.Commands <- BalanceCommand{Response: balanceResponseChan}
 	balance := <-balanceResponseChan
+	close(server.Commands)
 
 	if balance != 0 {
 		b.Error("Balance wasn't zero:", balance)

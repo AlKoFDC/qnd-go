@@ -23,20 +23,16 @@ func (s *FundServer) loop() {
 	for command := range s.Commands {
 
 		// command is just an interface{}, but we can check its real type
-		switch command.(type) {
-
+		switch command := command.(type) {
 		case WithdrawCommand:
-			// And then use a "type assertion" to convert it
-			withdrawal := command.(WithdrawCommand)
-			s.fund.Withdraw(withdrawal.Amount)
+			s.fund.Withdraw(command.Amount)
 
 		case BalanceCommand:
-			getBalance := command.(BalanceCommand)
 			balance := s.fund.Balance()
-			getBalance.Response <- balance
-
+			command.Response <- balance
+			close(command.Response)
 		default:
-			panic(fmt.Sprintf("Unrecognized command: %v", command))
+			panic(fmt.Sprintf("Unrecognized command: %v %T", command, command))
 		}
 	}
 }
@@ -47,4 +43,15 @@ type WithdrawCommand struct {
 
 type BalanceCommand struct {
 	Response chan int
+}
+
+type validator interface {
+	valid() bool
+}
+
+func (w WithdrawCommand) valid() bool {
+	return w.Amount > 0
+}
+func (b BalanceCommand) valid() bool {
+	return b.Response != nil
 }

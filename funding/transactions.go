@@ -20,7 +20,7 @@ func (s *FundTransactor) loop() {
 	for transaction := range s.commands {
 		// Now we don't need any type-switch mess
 		transaction.Transactor(s.fund)
-		transaction.Done <- true
+		transaction.Done <- struct{}{}
 	}
 }
 
@@ -44,14 +44,14 @@ type Transactor func(fund *Fund)
 // Add a new command type with a callback and a semaphore channel
 type TransactionCommand struct {
 	Transactor Transactor
-	Done       chan bool
+	Done       chan struct{}
 }
 
 // Wrap it up neatly in an API method, like the other commands
 func (s *FundTransactor) Transact(transactor Transactor) {
 	command := TransactionCommand{
 		Transactor: transactor,
-		Done:       make(chan bool),
+		Done:       make(chan struct{}),
 	}
 	s.commands <- command
 	<-command.Done

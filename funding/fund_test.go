@@ -5,6 +5,13 @@ import (
 	"testing"
 )
 
+func TestBalance(t *testing.T) {
+	f := NewFund(2)
+	t.Log(f.Balance())
+	t.Log(f.balance)
+	t.Log(f.Balance())
+}
+
 func BenchmarkFund(b *testing.B) {
 	// Add as many dollars as we have iterations this run
 	fund := NewFund(b.N)
@@ -61,4 +68,20 @@ func BenchmarkWithdrawals(b *testing.B) {
 	if fund.Balance() != 0 {
 		b.Error("Balance wasn't zero:", fund.Balance())
 	}
+}
+
+func TestInterface(t *testing.T) {
+	var bf balanceFunc = func() int {
+		return 7
+	}
+	t.Log(getBalance(&bf))
+}
+
+type balanceFunc func() int
+
+var _ Withdrawer = (*Fund)(nil)
+var _ FundManager = (*Fund)(nil)
+
+func (bf balanceFunc) Balance() int {
+	return bf()
 }

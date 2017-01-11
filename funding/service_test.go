@@ -1,9 +1,14 @@
 package funding
 
 import (
+	"os"
 	"sync"
 	"testing"
 )
+
+func TestMain(m *testing.M) {
+	os.Exit(m.Run())
+}
 
 func BenchmarkWithdrawalsService(b *testing.B) {
 	// Skip N = 1

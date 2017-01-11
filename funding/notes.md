@@ -14,3 +14,4 @@
      - named return parameters
      - type conversion/assertion
      
+[Followed Tutorial](https://www.toptal.com/go/go-programming-a-step-by-step-introductory-tutorial)

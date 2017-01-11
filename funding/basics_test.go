@@ -21,7 +21,7 @@ func TestSwap(t *testing.T) {
 		expect2 string
 	}
 	for _, value := range []testIO{
-		{"", "world", "world", ""},
+		{in1: "world", expect2: "world"},
 		{"hello", "", "", "hello"},
 		{"sauce", "awesome", "awesome", "sauce"},
 	} {
@@ -35,16 +35,30 @@ func TestSwap(t *testing.T) {
 	}
 }
 
+func TestMe(t *testing.T) {
+	for _, v := range map[int]int{
+		1: 4,
+		2: 5,
+		3: 6,
+	} {
+		t.Log(v)
+	}
+	t.Log("slice")
+	for _, v := range []int{10, 9, 8, 7, 6} {
+		t.Log(v)
+	}
+}
+
 func TestSplit(t *testing.T) {
 	var a, b int
 	const (
-		expectA = 6
-		expectB = 11
+		expectA = 7
+		expectB = 10
 	)
 	a, b = split(17)
 	t.Log(a, b)
 	if a != expectA {
-		t.Fatal("a not as expected")
+		t.Error("a not as expected")
 	}
 	if b != expectB {
 		t.Fatalf("b not as expected: got %d expect %d", b, expectB)
@@ -56,11 +70,9 @@ func TestMap(t *testing.T) {
 		Lat, Long float64
 	}
 
-	m := make(map[string]Vertex)
-	m = map[string]Vertex{
-		"Bell Labs": {1, 1},
-		"Google":    {37.42202, -122.08408},
-	}
+	//m := make(map[string]Vertex)
+
+	m := map[string]Vertex{"Bell Labs": {1, 1}, "Google": {37.42202, -122.08408}}
 	m["Bell Labs"] = Vertex{
 		40.68433, -74.39967,
 	}
