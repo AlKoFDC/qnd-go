@@ -6,16 +6,39 @@ import (
 	"html"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 )
 
+// You can call the server by executing: curl localhost:1408/random
 func main() {
-	//fmt.Println(getRandom())
-	fmt.Println(getQuoteJoke())
-
+	// This is done with the default handlers and servers.
+	// It is fine in a small server like that, but you could also create your
 	http.HandleFunc("/random", serveRandomJoke)
-	if err := http.ListenAndServe(":1408", nil); err != nil {
-		fmt.Println(err)
+
+	errorChannel := make(chan error, 1)
+	defer close(errorChannel)
+
+	go func() {
+		if err := http.ListenAndServe(":1408", nil); err != nil {
+			errorChannel <- err
+		}
+	}()
+
+	// Handle SIGINT and SIGTERM for graceful shutdowns.
+	systemInterruptChannel := make(chan os.Signal)
+	defer close(systemInterruptChannel)
+	signal.Notify(systemInterruptChannel, syscall.SIGINT, syscall.SIGTERM)
+
+	select {
+	case errorReturn, ok := <-errorChannel:
+		if ok {
+			fmt.Println(errorReturn)
+		} // else: channel closed, we're done successfully
+	case interruptSignal := <-systemInterruptChannel:
+		fmt.Printf("Exit due to signal %s\n", interruptSignal)
 	}
 }
 
