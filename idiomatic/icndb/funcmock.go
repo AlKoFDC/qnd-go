@@ -16,10 +16,6 @@ var getURL = func(url string) ([]byte, error) {
 }
 
 func getRandomJokeWithFunction() (string, error) {
-	const (
-		sfw           = "?exclude=[explicit]"
-		randomJokeURL = "https://api.icndb.com/jokes/random" + sfw
-	)
 	jokeObject, err := getURL(randomJokeURL)
 	if err != nil {
 		return "", err

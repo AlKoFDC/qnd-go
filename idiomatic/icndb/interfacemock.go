@@ -13,10 +13,6 @@ func (srv icndbServer) getURL(url string) ([]byte, error) {
 }
 
 func getRandomJokeWithInterface(srv jokeGetter) (string, error) {
-	const (
-		sfw           = "?exclude=[explicit]"
-		randomJokeURL = "https://api.icndb.com/jokes/random" + sfw
-	)
 	jokeObject, err := srv.getURL(randomJokeURL)
 	if err != nil {
 		return "", err
