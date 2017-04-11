@@ -15,7 +15,7 @@ import (
 // You can call the server by executing: curl localhost:1408/random
 func main() {
 	// This is done with the default handlers and servers.
-	// It is fine in a small server like that, but you could also create your
+	// It is fine in a small server like that, but you could also create your own server copy.
 	http.HandleFunc("/random", serveRandomJoke)
 
 	errorChannel := make(chan error, 1)
